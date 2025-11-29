@@ -11,6 +11,7 @@
         <div>
             <lable>Filter by category:</lable>
             <select id="filterCategory">
+                <option value="All">All</option>
                 <option value="Auto">Auto</option>
                 <option value="Car">Car</option>
                 <option value="Truck">Truck</option>
@@ -18,6 +19,7 @@
             </select>
             <label>Filter By status:</label>
             <select id="filterAvailability">
+                <option value="All">All</option>
                 <option value="Available">Available</option>
                 <option value="Unavailable">Unavailable</option>
             </select>
@@ -75,7 +77,7 @@
             }
 
             const newFleet={
-                id:Data.now(),
+                id:Date.now(),
                 reg,
                 cat,
                 driver,
@@ -130,6 +132,18 @@
                 card.append(img,h3,pCat,pDriver,pStatus,editBtn,toggleBtn,delBtn);
                 mainContent.append(card);
             });
+        }
+
+        function applyFilters(){
+            const selectedCat=filterCat.value;
+            const selectedAvail=filterAvail.value;
+            let filtered=fleetData.filter(item=>{
+                let catMatch=(selectedCat==="All")?true:item.cat===selectedCat;
+                let statusString=item.Availability?"Available":"Unavailable";
+                let availMatch=(selectedAvail==="All")?true:statusString===selectedAvail;
+                return catMatch && availMatch
+            });
+            renderData(filtered);
         }
     </script>
     
