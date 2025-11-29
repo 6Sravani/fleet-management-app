@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+</head>
+<body>
+    <nav>
+        <h2>Fleet Admin</h2>
+        <div>
+            <lable>Filter by category:</lable>
+            <select id="filterCategory">
+                <option value="Auto">Auto</option>
+                <option value="Car">Car</option>
+                <option value="Truck">Truck</option>
+                <option value="Bus">Bus</option>
+            </select>
+            <label>Filter By status:</label>
+            <select id="filterAvailability">
+                <option value="Available">Available</option>
+                <option value="Unavailable">Unavailable</option>
+            </select>
+            <button id="clearFiler">Clear Filer</button>
+        </div>
+    </nav>
+    <hr>
+    <div>
+        <h3>Add New Fleet</h3>
+        <input type="text" id="regNo" placeholder="Reg No of Vehicle">
+        <br>
+        <select id="category">
+            <option value="Auto">Auto</option>
+                <option value="Car">Car</option>
+                <option value="Truck">Truck</option>
+                <option value="Bus">Bus</option>
+        </select>
+        <br>
+        <input type="text" id="driver" placeholder="Driver Name">
+        <br>
+        <label>Is Available:</label>
+        <select id="Availability">
+                <option value="Available">Available</option>
+                <option value="Unavailable">Unavailable</option>
+        </select>
+        <br>
+        <button id="addFleetBtn">Add Fleet</button>
+    </div>
+    <hr>
+    <h3>Vehicle List</h3>
+    <div id="mainContent"></div>
+    <script>
+        let fleetData=[];
+
+        const regInput=document.getElementById("regNo");
+        const catInput=document.getElementById("category");
+        const driverInput=document.getElementById("driver");
+        const availInput=document.getElementById("Availability");
+        const addbtn=document.getElementById("addFleetBtn");
+        const mainContent=document.getElementById("mainContent");
+
+        const filterCat=document.getElementById("filterCategory");
+        const filterAvail=document.getElementById("filterAvailability");
+        const clearFilerBtn=document.getElementById("clearFilter");
+
+        addbtn.addEventListener("click",()=>{
+            const reg=regInput.value.trim();
+            const cat=catInput.value;
+            const driver=driverInput.value.trim();
+            const Availability=availInput.value;
+
+            if(!reg || !cat || !driver){
+                alert("please fill all required fields");
+                return;
+            }
+
+            const newFleet={
+                id:Data.now(),
+                reg,
+                cat,
+                driver,
+                Availability
+            };
+
+            fleetData.push(newFleet);
+            applyFilters();
+
+            regInput.value="";
+            catInput.value="";
+            driverInput.value="";
+            availInput.value="";
+        });
+
+        function renderData(data){
+            mainContent.innerHTML="";
+            data.forEach(item=>{
+                const card=document.createElement("div");
+                card.style.border="1px solid black";
+                card.style.padding="10px";
+                card.style.margin="10px 0";
+
+                const img= document.createElement("img");
+                img.src="https://cdn-icon-png.flaticon.com/512/55/55283.png";
+                img.style.width="50px";
+
+                const h3=document.createElement("h3");
+                h3.innerText=item.reg;
+
+                const pCat=document.createElement("p");
+                pCat.innerText="Category : "+item.cat;
+
+                const pDriver=document.createElement("p");
+                pDriver.innerText="Driver : "+item.driver;
+
+                const pStatus=document.createElement("p");
+                pStatus.innerText="Availability : "+item.Availability;
+
+                const editBtn=document.createElement("button");
+                editBtn.innerText="Update Driver";
+                editBtn.addEventListener("click",()=>updateDriver(item.id));
+
+                const toggleBtn=document.createElement("button");
+                toggleBtn.innerText="change Availability";
+                toggleBtn.addEventListener("click",()=>toggleStatus(item.id));
+
+                const delBtn=document.createElement("button");
+                delBtn.innerText="Delete Vehicle";
+                delBtn.addEventListener("click",()=>deleteVehicle(item.id));
+
+                card.append(img,h3,pCat,pDriver,pStatus,editBtn,toggleBtn,delBtn);
+                mainContent.append(card);
+            });
+        }
+    </script>
+    
+</body>
+</html>
